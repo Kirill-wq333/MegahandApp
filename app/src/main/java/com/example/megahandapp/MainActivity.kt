@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -224,54 +225,54 @@ fun BottomBar() {
 
 
 
-//fun isNetworkAvailable(context: Context): Boolean {
-//    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//    val network = connectivityManager.activeNetwork ?: return false
-//    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-//    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-//            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-//} else {
-//    val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-//    return networkInfo.isConnected
-//}
-//}
-//
-//@Composable
-//fun Navigation() {
-//    val navController = rememberNavController()
-//    val context = LocalContext.current
-//    var isOnline by remember { mutableStateOf(isNetworkAvailable(context)) }
-//
-//    LaunchedEffect(Unit){
-//        while (true){
-//            val newIsOnline = isNetworkAvailable(context)
-//            if (newIsOnline != isOnline) {
-//                isOnline = newIsOnline
-//                delay(3000)
-//            }
-//
-//        }
-//    }
-//    if (isOnline) {
-//        NavHost(
-//            navController = navController,
-//            startDestination = "Главная"
-//        ) {
-//            composable("Главная") {
-//                MegaHand()
-//            }
-//        }
-//    }
-//    else {
-//        NavHost(
-//            navController = navController,
-//            startDestination = "Loading"
-//        ) {
-//            composable("Loading") {
-//                LoadingScreen()
-//            }
-//        }
-//    }
-//
-//}
+fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    val network = connectivityManager.activeNetwork ?: return false
+    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+} else {
+    val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+    return networkInfo.isConnected
+}
+}
+
+@Composable
+fun Navigation() {
+    val navController = rememberNavController()
+    val context = LocalContext.current
+    var isOnline by remember { mutableStateOf(isNetworkAvailable(context)) }
+
+    LaunchedEffect(Unit){
+        while (true){
+            val newIsOnline = isNetworkAvailable(context)
+            if (newIsOnline != isOnline) {
+                isOnline = newIsOnline
+                delay(3000)
+            }
+
+        }
+    }
+    if (isOnline) {
+        NavHost(
+            navController = navController,
+            startDestination = "Главная"
+        ) {
+            composable("Главная") {
+                MegaHand()
+            }
+        }
+    }
+    else {
+        NavHost(
+            navController = navController,
+            startDestination = "Loading"
+        ) {
+            composable("Loading") {
+                LoadingScreen()
+            }
+        }
+    }
+
+}
