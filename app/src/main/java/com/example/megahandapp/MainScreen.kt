@@ -135,7 +135,14 @@ fun MainTopBar(
 }
 
 @Composable
-fun CenterMain(){
+fun CenterMain(
+    onClick: () -> Unit
+){
+
+    val imageUrl = rememberImagePainter(
+        data = "https://mhand.ru/media/banner_app/Group_775_2.png",
+        builder = {}
+    )
 
     LazyColumn(
         modifier = Modifier
@@ -165,7 +172,27 @@ fun CenterMain(){
                 profile = "Заполните профиль чтобы получить больше",
             )
         }
-
+        item {
+            Box(
+                modifier = Modifier
+                    .width(363.dp)
+                    .height(100.dp),
+                contentAlignment = Alignment.TopEnd
+            ){
+                Image(
+                    painter = imageUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+                Icon(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable { onClick },
+                    imageVector = ImageVector.vectorResource(R.drawable.cross),
+                    contentDescription = null
+                )
+            }
+        }
     }
 }
 
@@ -289,6 +316,8 @@ fun LazyRowСuarCodeCenterMain(
     )
 
     Box(
+        modifier = Modifier
+            .padding(15.dp, 0.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -298,7 +327,7 @@ fun LazyRowСuarCodeCenterMain(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .height(169.dp)
                     .border(
                         width = 1.dp,
                         color = Color(0xFF46423E).copy(0.1f),
@@ -313,13 +342,13 @@ fun LazyRowСuarCodeCenterMain(
                     Column(
                         modifier = Modifier
                             .padding(
-                                top = 10.dp,
+                                top = 0.dp,
                                 end = 0.dp,
                                 start = 20.dp,
                                 bottom = 0.dp
                             )
                             .width(212.dp),
-                        verticalArrangement = Arrangement.spacedBy(19.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.Start
                     ) {
                         Column(
@@ -359,7 +388,7 @@ fun LazyRowСuarCodeCenterMain(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Column(
-                                verticalArrangement = Arrangement.spacedBy(10.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Row(
@@ -421,7 +450,8 @@ fun LazyRowСuarCodeCenterMain(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(75.dp)
+                                    .size(75.dp),
+                                contentAlignment = Alignment.Center
                             ) {
                                 Image(
                                     painter = imageUrl,
@@ -525,6 +555,8 @@ fun ButtonMain(
 @Composable
 fun CenterMainPreview(){
     Surface {
-        CenterMain()
+        CenterMain(
+            onClick = {}
+        )
     }
 }

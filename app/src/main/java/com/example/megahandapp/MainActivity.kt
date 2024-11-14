@@ -47,13 +47,7 @@ class MainActivity : ComponentActivity() {
 //                    LoadingScreen()
 //                MegaHand()
                 CenterMain(
-                    money = "7200₽",
-                    onClick = {},
-                    scores = "Накоплено баллов",
-                    cashBack = "4% кешбэка",
-                    profile = "Заполните профиль чтобы получить больше",
-                    service = "О сервисе",
-                    help = "Помощь"
+                    onClick = {}
                 )
             }
         }
