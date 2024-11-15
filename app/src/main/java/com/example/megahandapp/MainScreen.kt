@@ -1,5 +1,6 @@
 package com.example.megahandapp
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 
 
 @Composable
@@ -63,7 +67,7 @@ fun MainTopBar(
             ) {
                 Image(
                     modifier = Modifier
-                        .clickable { onClick },
+                        .clickable { onClick() },
                     painter = painterResource(R.drawable.chevron_right),
                     contentDescription = null
                 )
@@ -90,7 +94,7 @@ fun MainTopBar(
                 ) {
                     Box(
                         modifier = Modifier
-                            .clickable { onClick }
+                            .clickable { onClick() }
                             .size(32.dp)
                             .background(
                                 color = Color(0xFFE7D52F),
@@ -105,7 +109,7 @@ fun MainTopBar(
                     }
                     Text(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         text = money,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -118,13 +122,13 @@ fun MainTopBar(
                 ) {
                     Image(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         painter = painterResource(R.drawable.location),
                         contentDescription = null
                     )
                     Image(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         painter = painterResource(R.drawable.notifications),
                         contentDescription = null
                     )
@@ -164,7 +168,7 @@ fun CenterMain(
            }
        }
         item {
-            LazyRowСuarCodeCenterMain(
+            LazyRowCodeCenterMain(
                 money = "7200₽",
                 onClick = {},
                 scores = "Накоплено баллов",
@@ -179,43 +183,51 @@ fun CenterMain(
                     .height(100.dp),
                 contentAlignment = Alignment.TopEnd
             ){
-                Image(
-                    painter = imageUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
+
                 Icon(
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onClick },
+                        .clickable { onClick() },
                     imageVector = ImageVector.vectorResource(R.drawable.cross),
                     contentDescription = null
                 )
             }
         }
+        item {
+
+        }
     }
+}
+
+@Preview
+@Composable
+private fun Async() {
+    AsyncImage(
+        model = "https://storage-api.petstory.ru/resize/1000x1000x80/4b/a4/5a/4ba45ae909d44da59018303d12276ace.jpeg",
+        onState = {
+            when(it) {
+                is AsyncImagePainter.State.Error -> {
+                    Log.d("AAAA", "Async: ${it.result.throwable}")
+                }
+                is AsyncImagePainter.State.Loading -> {
+                    Log.d("AAAA", "Loading:")
+                }
+                is AsyncImagePainter.State.Empty -> {
+                    Log.d("AAAA", "empty:")
+                }
+                is AsyncImagePainter.State.Success -> {
+                    Log.d("AAAA", "success: ${it.result}")
+                }
+            }
+        },
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize()
+    )
 }
 
 
 @Composable
 fun LazyRowImageCenterMain(){
-
-    val imageUrl = rememberImagePainter(
-        data = "https://s3-alpha-sig.figma.com/img/45c0/5ef9/36221f87dea04ad0c0420ac97e5fb1e3?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hn2t0WYZ6UsFoC2q5BUxwfjWBEYI3i33k-17W36lXpc4I1j7XyJdV0MtmfBCSJkb9JG0hb6i6hqpdczewTbo2rHoW9ERfgLnBJFYHtmobS5IsRnQynyKtyjw3ag5qHC5xsmfqKZ1YcIYO5OPt-1u-Zv1khVbWvvLHTUNedtl1t~JVTa9pzVHSYu82qWwY-wmJwE0DdJ-UnC8Fd~cndNrdwgzSlyTrgiEJHIIjRjHFpj64wIHduPu1T0ANdiYOk3QCSrnZ0Y2s5qugiyuvKoG-eZ6Wtv1-UZ7NvmFeel1XtYuXkRd4c3Zee6CL-H88jFBc3DEFo9KWMOHyABBq4JXAA__",
-        builder = {}
-    )
-    val imageUrl2 = rememberImagePainter(
-        data = "https://s3-alpha-sig.figma.com/img/3a2c/4461/0e8d8d0e36b5cfe59efca342e9a4f35d?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=oOs0VzvoOlT6Zu3sCvFgQEDV~QLQe0g9jqGrqMA9dHjHR5bq6WoTjYBIq3CQ8VcjPYGi9AiHna-7ulcLcBRUBxj7P5TFglSPgl23MFC99tuwEqArNh0kD01-jNXoCPIHiopdcskGJy~p3Tsu9vjzo2IWLhIJnUu4fjBFXq6E~VH20rPKI9AIOFBR8OG0p-tWohz6v1N2lT5U3pjTFySIBPrBxNXceRgnF3HtbkVlr981vTD5jPPXCGCJ4TVSrXF7KDH1SIl3UrXKbTO2YKC-Kydq20CnLaSVPax07wXbIId8KZ7RRN0gYuNAA8dRx1UHHNSEsxAf~rkyPgWTKR4cZw__",
-        builder = {}
-    )
-    val imageUrl3 = rememberImagePainter(
-        data = "https://s3-alpha-sig.figma.com/img/cfbb/41bd/10acc06b68fd0bf9cefbbe9d87dd8d7b?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jO-YpqGjYqsgqkPN53kA6qje7-3NbKw65~uM5avo0ZBIDAMA8R9xMZ3p44vFCs34IG1krv8f5XF0~UEHequ~d6Am-ijC2lA9NxuLsNPoPJtzYgA5Y4rW7TpmGqOuEztwngM9cKIiwNmfsHWmZNoHNUipETkuIsYRRoQObJidRSQcY9WoRLGLOsA-VtivRUPWacjGXzadpmO82lPPvluodWdJOJFU89UiWO~9Luf~MQhRAw6kPRmDc1hp0SkmEdwtM40v0LZJGYlPIa6XP1jFxV-bhmNc7rs3-rqdw5xm0Wff51SY9inQm4IBHAQ3KEdbI0ySTcCP4vM4eu90kaKuBQ__",
-        builder = {}
-    )
-    val imageUrl4 = rememberImagePainter(
-        data = "https://s3-alpha-sig.figma.com/img/159f/8d96/2114df75ea5c1e0a0b5b524d492cb623?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=pSK0EgbbbHsQl1u5egjXIOFC6dXI0kPuQ6WEsvPqFJRie0NUQrlPKRObn39OxLBrgBsqeaPlnPcL8d4I9UzImCrEsZtciaoPAPQ7Z~K9PxV3v-wiy4ax8vQdRxUjTkm16Nl0pfWr2obE-QRAgzA3DYpd0Q60sm6pWLxEFqzJTU0ps2AplWYboaaxWzNKwLNGy8vufxlFkM2iZHR7r-3BjypUHuqruoLCIVfm1XJF~WHN7d7IYTOQB5gxPd~~2rHzAKR3V-iyJQlI7Z7rJoVwVIltIUJFgRbCcsBi822q2lzV3ZI8j-jcK0~Yemivq-l~zMjTLpC-u2CsIesm9hgdxw__",
-        builder = {}
-    )
 
     Row(
         modifier =  Modifier
@@ -228,10 +240,11 @@ fun LazyRowImageCenterMain(){
                 .size(92.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Image(
-                painter = imageUrl,
+            AsyncImage(
+                model = "https://s3-alpha-sig.figma.com/img/45c0/5ef9/36221f87dea04ad0c0420ac97e5fb1e3?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hn2t0WYZ6UsFoC2q5BUxwfjWBEYI3i33k-17W36lXpc4I1j7XyJdV0MtmfBCSJkb9JG0hb6i6hqpdczewTbo2rHoW9ERfgLnBJFYHtmobS5IsRnQynyKtyjw3ag5qHC5xsmfqKZ1YcIYO5OPt-1u-Zv1khVbWvvLHTUNedtl1t~JVTa9pzVHSYu82qWwY-wmJwE0DdJ-UnC8Fd~cndNrdwgzSlyTrgiEJHIIjRjHFpj64wIHduPu1T0ANdiYOk3QCSrnZ0Y2s5qugiyuvKoG-eZ6Wtv1-UZ7NvmFeel1XtYuXkRd4c3Zee6CL-H88jFBc3DEFo9KWMOHyABBq4JXAA__",
                 contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(92.dp)
             )
             Text(
                 text = "О магазинах Волгограда",
@@ -247,10 +260,10 @@ fun LazyRowImageCenterMain(){
                 .size(92.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Image(
-                painter = imageUrl2,
+            AsyncImage(
+                model = "https://s3-alpha-sig.figma.com/img/3a2c/4461/0e8d8d0e36b5cfe59efca342e9a4f35d?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=oOs0VzvoOlT6Zu3sCvFgQEDV~QLQe0g9jqGrqMA9dHjHR5bq6WoTjYBIq3CQ8VcjPYGi9AiHna-7ulcLcBRUBxj7P5TFglSPgl23MFC99tuwEqArNh0kD01-jNXoCPIHiopdcskGJy~p3Tsu9vjzo2IWLhIJnUu4fjBFXq6E~VH20rPKI9AIOFBR8OG0p-tWohz6v1N2lT5U3pjTFySIBPrBxNXceRgnF3HtbkVlr981vTD5jPPXCGCJ4TVSrXF7KDH1SIl3UrXKbTO2YKC-Kydq20CnLaSVPax07wXbIId8KZ7RRN0gYuNAA8dRx1UHHNSEsxAf~rkyPgWTKR4cZw__",
                 contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
             Text(
                 text = "Новые поступления",
@@ -266,10 +279,10 @@ fun LazyRowImageCenterMain(){
                 .size(92.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Image(
-                painter = imageUrl3,
+            AsyncImage(
+                model = "https://s3-alpha-sig.figma.com/img/cfbb/41bd/10acc06b68fd0bf9cefbbe9d87dd8d7b?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jO-YpqGjYqsgqkPN53kA6qje7-3NbKw65~uM5avo0ZBIDAMA8R9xMZ3p44vFCs34IG1krv8f5XF0~UEHequ~d6Am-ijC2lA9NxuLsNPoPJtzYgA5Y4rW7TpmGqOuEztwngM9cKIiwNmfsHWmZNoHNUipETkuIsYRRoQObJidRSQcY9WoRLGLOsA-VtivRUPWacjGXzadpmO82lPPvluodWdJOJFU89UiWO~9Luf~MQhRAw6kPRmDc1hp0SkmEdwtM40v0LZJGYlPIa6XP1jFxV-bhmNc7rs3-rqdw5xm0Wff51SY9inQm4IBHAQ3KEdbI0ySTcCP4vM4eu90kaKuBQ__",
                 contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
             Text(
                 text = "Одежда бренда Christian Dior",
@@ -285,10 +298,10 @@ fun LazyRowImageCenterMain(){
                 .size(92.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            Image(
-                painter = imageUrl4,
+            AsyncImage(
+                model = "https://s3-alpha-sig.figma.com/img/159f/8d96/2114df75ea5c1e0a0b5b524d492cb623?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=pSK0EgbbbHsQl1u5egjXIOFC6dXI0kPuQ6WEsvPqFJRie0NUQrlPKRObn39OxLBrgBsqeaPlnPcL8d4I9UzImCrEsZtciaoPAPQ7Z~K9PxV3v-wiy4ax8vQdRxUjTkm16Nl0pfWr2obE-QRAgzA3DYpd0Q60sm6pWLxEFqzJTU0ps2AplWYboaaxWzNKwLNGy8vufxlFkM2iZHR7r-3BjypUHuqruoLCIVfm1XJF~WHN7d7IYTOQB5gxPd~~2rHzAKR3V-iyJQlI7Z7rJoVwVIltIUJFgRbCcsBi822q2lzV3ZI8j-jcK0~Yemivq-l~zMjTLpC-u2CsIesm9hgdxw__",
                 contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
             Text(
                 text = "Купоны и скидки в приложении",
@@ -303,18 +316,13 @@ fun LazyRowImageCenterMain(){
 }
 
 @Composable
-fun LazyRowСuarCodeCenterMain(
+fun LazyRowCodeCenterMain(
     onClick: () -> Unit,
     money: String,
     scores: String,
     cashBack: String,
     profile: String,
 ){
-    val imageUrl = rememberImagePainter(
-        data = "https://s3-alpha-sig.figma.com/img/2719/c139/e208c90fb342991b1adb967066c3c2bb?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dCYtZrh95-053e5JRCDAiPnlXdUL559CFCDI8mJ6bNUSsTZO-RkS2VLkPkvf1FNq7hYDKG4M2KWPS9OYW4t-mLSWKiLllDj6pFZzh3Hhvn~yZyGx-~YFMU~8VUxBrGy5RTlgv-JtTUKFxgsIHDYfyV6GI5YoLQ3lZuZTS0WqQSXB8ehbEOplpkBxxdi0zW2Gb08Wl3hKK9dLfqx1sm-uQR6qPlbz0V7oHicDh7AXXTb7a~TC6t2ytffoS021mC-CRv289XHholRzrcL7FVS3ZhHV-FghXTcG73VgfBLe4F7cIc6OnKCTPIyl3fCIQHJQtRN6MESdXuLIOg4lqVf25g__",
-        builder = {}
-    )
-
     Box(
         modifier = Modifier
             .padding(15.dp, 0.dp),
@@ -403,7 +411,7 @@ fun LazyRowСuarCodeCenterMain(
                                     )
                                     Icon(
                                         modifier = Modifier
-                                            .clickable { onClick },
+                                            .clickable { onClick() },
                                         imageVector = ImageVector.vectorResource(R.drawable.chevron_right1),
                                         contentDescription = null,
                                     )
@@ -453,14 +461,14 @@ fun LazyRowСuarCodeCenterMain(
                                     .size(75.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Image(
-                                    painter = imageUrl,
+                                AsyncImage(
+                                    model = "https://s3-alpha-sig.figma.com/img/2719/c139/e208c90fb342991b1adb967066c3c2bb?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dCYtZrh95-053e5JRCDAiPnlXdUL559CFCDI8mJ6bNUSsTZO-RkS2VLkPkvf1FNq7hYDKG4M2KWPS9OYW4t-mLSWKiLllDj6pFZzh3Hhvn~yZyGx-~YFMU~8VUxBrGy5RTlgv-JtTUKFxgsIHDYfyV6GI5YoLQ3lZuZTS0WqQSXB8ehbEOplpkBxxdi0zW2Gb08Wl3hKK9dLfqx1sm-uQR6qPlbz0V7oHicDh7AXXTb7a~TC6t2ytffoS021mC-CRv289XHholRzrcL7FVS3ZhHV-FghXTcG73VgfBLe4F7cIc6OnKCTPIyl3fCIQHJQtRN6MESdXuLIOg4lqVf25g__",
                                     contentDescription = null,
-                                    contentScale = ContentScale.Crop
+                                    contentScale = ContentScale.Crop,
                                 )
                                 Image(
                                     modifier = Modifier
-                                        .clickable { onClick },
+                                        .clickable { onClick() },
                                     imageVector = ImageVector.vectorResource(R.drawable.magnifier),
                                     contentDescription = null
                                 )
@@ -492,7 +500,7 @@ fun ButtonMain(
             modifier = Modifier
                 .width(174.dp)
                 .height(46.dp)
-                .clickable { onClick }
+                .clickable { onClick() }
                 .background(
                     color = Color(0xFF46423E),
                     shape = RoundedCornerShape(8.dp)
@@ -521,7 +529,7 @@ fun ButtonMain(
             modifier = Modifier
                 .width(174.dp)
                 .height(46.dp)
-                .clickable { onClick }
+                .clickable { onClick() }
                 .background(
                     color = Color(0xFF46423E),
                     shape = RoundedCornerShape(8.dp)
@@ -544,6 +552,39 @@ fun ButtonMain(
                     imageVector = ImageVector.vectorResource(R.drawable.chevron_right1),
                     contentDescription = null
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun CollectionCenterMain(
+    nameCollection: String,
+    womenClothing: String,
+    boysClothing: String,
+    childrenClothing: String,
+    onClick: () -> Unit
+){
+    Box(
+        contentAlignment = Alignment.Center
+    ){
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = nameCollection,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(listOf(Font(R.font.manrope_bold))),
+                fontWeight = FontWeight.Bold
+            )
+            LazyRow(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ){
+                item {
+
+                }
             }
         }
     }
