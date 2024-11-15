@@ -63,7 +63,7 @@ fun MainTopBar(
             ) {
                 Image(
                     modifier = Modifier
-                        .clickable { onClick },
+                        .clickable { onClick() },
                     painter = painterResource(R.drawable.chevron_right),
                     contentDescription = null
                 )
@@ -90,7 +90,7 @@ fun MainTopBar(
                 ) {
                     Box(
                         modifier = Modifier
-                            .clickable { onClick }
+                            .clickable { onClick() }
                             .size(32.dp)
                             .background(
                                 color = Color(0xFFE7D52F),
@@ -105,7 +105,7 @@ fun MainTopBar(
                     }
                     Text(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         text = money,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -118,13 +118,13 @@ fun MainTopBar(
                 ) {
                     Image(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         painter = painterResource(R.drawable.location),
                         contentDescription = null
                     )
                     Image(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         painter = painterResource(R.drawable.notifications),
                         contentDescription = null
                     )
@@ -187,7 +187,7 @@ fun CenterMain(
                 Icon(
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onClick },
+                        .clickable { onClick() },
                     imageVector = ImageVector.vectorResource(R.drawable.cross),
                     contentDescription = null
                 )
@@ -403,7 +403,7 @@ fun LazyRowСuarCodeCenterMain(
                                     )
                                     Icon(
                                         modifier = Modifier
-                                            .clickable { onClick },
+                                            .clickable { onClick() },
                                         imageVector = ImageVector.vectorResource(R.drawable.chevron_right1),
                                         contentDescription = null,
                                     )
@@ -460,7 +460,7 @@ fun LazyRowСuarCodeCenterMain(
                                 )
                                 Image(
                                     modifier = Modifier
-                                        .clickable { onClick },
+                                        .clickable { onClick() },
                                     imageVector = ImageVector.vectorResource(R.drawable.magnifier),
                                     contentDescription = null
                                 )
@@ -492,7 +492,7 @@ fun ButtonMain(
             modifier = Modifier
                 .width(174.dp)
                 .height(46.dp)
-                .clickable { onClick }
+                .clickable { onClick() }
                 .background(
                     color = Color(0xFF46423E),
                     shape = RoundedCornerShape(8.dp)
@@ -521,7 +521,7 @@ fun ButtonMain(
             modifier = Modifier
                 .width(174.dp)
                 .height(46.dp)
-                .clickable { onClick }
+                .clickable { onClick() }
                 .background(
                     color = Color(0xFF46423E),
                     shape = RoundedCornerShape(8.dp)
@@ -545,6 +545,31 @@ fun ButtonMain(
                     contentDescription = null
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun CollectionCenterMain(
+    nameCollection: String,
+    womenClothing: String,
+    boysClothing: String,
+    childrenClothing: String,
+    onClick: () -> Unit
+){
+    Box(
+        contentAlignment = Alignment.Center
+    ){
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = nameCollection,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(listOf(Font(R.font.manrope_bold))),
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
