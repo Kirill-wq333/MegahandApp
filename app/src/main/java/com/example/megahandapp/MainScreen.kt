@@ -143,11 +143,6 @@ fun CenterMain(
     onClick: () -> Unit
 ){
 
-    val imageUrl = rememberImagePainter(
-        data = "https://mhand.ru/media/banner_app/Group_775_2.png",
-        builder = {}
-    )
-
     LazyColumn(
         modifier = Modifier
             .width(400.dp)
@@ -183,7 +178,11 @@ fun CenterMain(
                     .height(100.dp),
                 contentAlignment = Alignment.TopEnd
             ){
-
+                AsyncImage(
+                    model = "https://mhand.ru/media/banner_app/Group_775_2.png",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
                 Icon(
                     modifier = Modifier
                         .padding(10.dp)
@@ -430,23 +429,18 @@ fun LazyRowCodeCenterMain(
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            Box(
+                            AsyncImage(
+                                model = "https://s3-alpha-sig.figma.com/img/2719/c139/e208c90fb342991b1adb967066c3c2bb?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dCYtZrh95-053e5JRCDAiPnlXdUL559CFCDI8mJ6bNUSsTZO-RkS2VLkPkvf1FNq7hYDKG4M2KWPS9OYW4t-mLSWKiLllDj6pFZzh3Hhvn~yZyGx-~YFMU~8VUxBrGy5RTlgv-JtTUKFxgsIHDYfyV6GI5YoLQ3lZuZTS0WqQSXB8ehbEOplpkBxxdi0zW2Gb08Wl3hKK9dLfqx1sm-uQR6qPlbz0V7oHicDh7AXXTb7a~TC6t2ytffoS021mC-CRv289XHholRzrcL7FVS3ZhHV-FghXTcG73VgfBLe4F7cIc6OnKCTPIyl3fCIQHJQtRN6MESdXuLIOg4lqVf25g__",
+                                contentDescription = null,
+                                modifier = Modifier.size(75.dp)
+                            )
+                            Image(
                                 modifier = Modifier
-                                    .size(75.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                AsyncImage(
-                                    model = "https://s3-alpha-sig.figma.com/img/2719/c139/e208c90fb342991b1adb967066c3c2bb?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dCYtZrh95-053e5JRCDAiPnlXdUL559CFCDI8mJ6bNUSsTZO-RkS2VLkPkvf1FNq7hYDKG4M2KWPS9OYW4t-mLSWKiLllDj6pFZzh3Hhvn~yZyGx-~YFMU~8VUxBrGy5RTlgv-JtTUKFxgsIHDYfyV6GI5YoLQ3lZuZTS0WqQSXB8ehbEOplpkBxxdi0zW2Gb08Wl3hKK9dLfqx1sm-uQR6qPlbz0V7oHicDh7AXXTb7a~TC6t2ytffoS021mC-CRv289XHholRzrcL7FVS3ZhHV-FghXTcG73VgfBLe4F7cIc6OnKCTPIyl3fCIQHJQtRN6MESdXuLIOg4lqVf25g__",
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                )
-                                Image(
-                                    modifier = Modifier
-                                        .clickable { onClick() },
-                                    imageVector = ImageVector.vectorResource(R.drawable.magnifier),
-                                    contentDescription = null
-                                )
-                            }
+                                    .clickable { onClick() },
+                                imageVector = ImageVector.vectorResource(R.drawable.magnifier),
+                                contentDescription = null
+                            )
+
                         }
                     }
                 }
