@@ -8,10 +8,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Surface
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,14 +49,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             MegahandAppTheme {
 //                    LoadingScreen()
-//                MegaHand()
-                CenterMain(
-                    onClick = {}
-                )
+                MegaHand()
+//                CenterMain(
+//                    onClick = {}
+//                )
             }
         }
     }
 }
+
 
 @Composable
 fun MegaHand()
@@ -66,15 +70,12 @@ fun MegaHand()
             )
         },
         bottomBar = {
-            BottomBar()
+            BottomBar(navController = navController)
         },
     ) {
         LazyColumn(
             modifier = Modifier
-                .padding(it)
-        ){
-
-        }
+                .padding(it)) {}
     }
 }
 
@@ -95,6 +96,13 @@ fun NavHostContainerTopBar(
                 onClick = {}
             )
         }
+        composable("Моя карта"){
+            MyCardTopBar(
+                nameCategory = "Моя карта",
+                money = "7200₽",
+                onClick = {}
+            )
+        }
         composable("Магазины") {
             ShopTopBar(
                 nameCategory = "Магазины",
@@ -102,9 +110,9 @@ fun NavHostContainerTopBar(
                 onClick = {}
             )
         }
-        composable("Новости") {
-            NewScreenTopBar(
-                nameCategory = "Новости",
+        composable("Профиль") {
+            ShopTopBar(
+                nameCategory = "Профиль",
                 money = "7200₽",
                 onClick = {}
             )
@@ -119,7 +127,9 @@ fun MegaHandPreview(){
 }
 
 @Composable
-fun BottomBar() {
+fun BottomBar(
+    navController: NavHostController,
+) {
 
     BottomNavigation(
         backgroundColor = (Color.White),
@@ -127,11 +137,12 @@ fun BottomBar() {
         modifier = Modifier
             .padding(bottom = 50.dp)
     ) {
-        val selectedIndex = remember { mutableStateOf(0) }
+        val navBackStackEntry = navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry.value?.destination?.route
 
         BottomNavigationItem(
-            selected = selectedIndex.value == 0,
-            onClick = { selectedIndex.value == 0 },
+            selected = currentRoute == "Главный",
+            onClick = { navController.navigate("Главный") },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.home),
@@ -145,12 +156,12 @@ fun BottomBar() {
                     textAlign = TextAlign.Center
                 )
             },
-            alwaysShowLabel = false
+            alwaysShowLabel = true
         )
 
         BottomNavigationItem(
-            selected = selectedIndex.value == 1,
-            onClick = { selectedIndex.value == 1 },
+            selected = currentRoute == "Моя карта",
+            onClick = { navController.navigate("Моя карта") },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.card),
@@ -167,8 +178,8 @@ fun BottomBar() {
             alwaysShowLabel = false
         )
         BottomNavigationItem(
-            selected = selectedIndex.value == 2,
-            onClick = { selectedIndex.value == 2 },
+            selected = currentRoute == "Магазины",
+            onClick = { navController.navigate("Магазины") },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.shop),
@@ -185,8 +196,8 @@ fun BottomBar() {
             alwaysShowLabel = false
         )
         BottomNavigationItem(
-            selected = selectedIndex.value == 3,
-            onClick = { selectedIndex.value == 3 },
+            selected = currentRoute == "Профиль",
+            onClick = { navController.navigate("Профиль") },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.account),
@@ -203,8 +214,8 @@ fun BottomBar() {
             alwaysShowLabel = false
         )
         BottomNavigationItem(
-            selected = selectedIndex.value == 4,
-            onClick = { selectedIndex.value == 4 },
+            selected = currentRoute == "",
+            onClick = {  },
             icon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.other),
@@ -221,58 +232,4 @@ fun BottomBar() {
             alwaysShowLabel = false
         )
     }
-}
-
-
-
-fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-    val network = connectivityManager.activeNetwork ?: return false
-    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-} else {
-    val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-    return networkInfo.isConnected
-}
-}
-
-@Composable
-fun Navigation() {
-    val navController = rememberNavController()
-    val context = LocalContext.current
-    var isOnline by remember { mutableStateOf(isNetworkAvailable(context)) }
-
-    LaunchedEffect(Unit){
-        while (true){
-            val newIsOnline = isNetworkAvailable(context)
-            if (newIsOnline != isOnline) {
-                isOnline = newIsOnline
-                delay(3000)
-            }
-
-        }
-    }
-    if (isOnline) {
-        NavHost(
-            navController = navController,
-            startDestination = "Главная"
-        ) {
-            composable("Главная") {
-                MegaHand()
-            }
-        }
-    }
-    else {
-        NavHost(
-            navController = navController,
-            startDestination = "Loading"
-        ) {
-            composable("Loading") {
-                LoadingScreen()
-            }
-        }
-    }
-
 }

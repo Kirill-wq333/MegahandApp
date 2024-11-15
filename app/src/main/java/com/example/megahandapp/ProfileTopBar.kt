@@ -24,9 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 @Composable
-fun ShopTopBar(
+fun ProfileTopBar(
     onClick:  () -> Unit,
     nameCategory: String,
     money: String
@@ -52,7 +51,7 @@ fun ShopTopBar(
             ) {
                 Image(
                     modifier = Modifier
-                        .clickable { onClick }
+                        .clickable { onClick() }
                         .rotate(180f),
                     painter = painterResource(R.drawable.chevron_right),
                     contentDescription = null
@@ -80,7 +79,7 @@ fun ShopTopBar(
                 ) {
                     Box(
                         modifier = Modifier
-                            .clickable { onClick }
+                            .clickable { onClick() }
                             .size(32.dp)
                             .background(
                                 color = Color(0xFFE7D52F),
@@ -95,7 +94,7 @@ fun ShopTopBar(
                     }
                     Text(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         text = money,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -108,13 +107,13 @@ fun ShopTopBar(
                 ) {
                     Image(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         painter = painterResource(R.drawable.location),
                         contentDescription = null
                     )
                     Image(
                         modifier = Modifier
-                            .clickable { onClick },
+                            .clickable { onClick() },
                         painter = painterResource(R.drawable.notifications),
                         contentDescription = null
                     )
