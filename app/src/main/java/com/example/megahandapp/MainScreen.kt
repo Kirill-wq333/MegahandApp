@@ -199,32 +199,6 @@ fun CenterMain(
     }
 }
 
-@Preview
-@Composable
-private fun Async() {
-    AsyncImage(
-        model = "https://storage-api.petstory.ru/resize/1000x1000x80/4b/a4/5a/4ba45ae909d44da59018303d12276ace.jpeg",
-        onState = {
-            when(it) {
-                is AsyncImagePainter.State.Error -> {
-                    Log.d("AAAA", "Async: ${it.result.throwable}")
-                }
-                is AsyncImagePainter.State.Loading -> {
-                    Log.d("AAAA", "Loading:")
-                }
-                is AsyncImagePainter.State.Empty -> {
-                    Log.d("AAAA", "empty:")
-                }
-                is AsyncImagePainter.State.Success -> {
-                    Log.d("AAAA", "success: ${it.result}")
-                }
-            }
-        },
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize()
-    )
-}
-
 
 @Composable
 fun LazyRowImageCenterMain(){
